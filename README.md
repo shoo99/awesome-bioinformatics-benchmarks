@@ -54,6 +54,8 @@ If you have a benchmarking study that is not yet included on this list, please m
   - [Hi-C/Hi-ChIP](#hi-chi-chip)
     - [TAD Calling](#tad-calling)
     - [Normalization Methods](#normalization-methods-1)
+  - [Proteomics](#proteomics)
+    - [Label-Free Quantification](#label-free-quantification)
 - [Contributors](#contributors)
 
 
@@ -1115,6 +1117,24 @@ See figure 5 for pratical guidelines.
 **Recommendation(s):** See **Table 2** for a succinct results summary. In summary, the authors found that use-case determines the best tool. All of these methods except `multiHiCcompare` are single sample methods, which led to `multiHiCcompare` performing the best in many considerations, including distribution of interaction frequency, comparability between contexts, and consistency of distance stratum. However, `multiHiCcompare` is by far the most computationally expensive and requires a large number of samples to be useful. `SCN` and `KR` show the best reproducibility of TAD architecture across various resolutions. `chromoR` was found to blur interaction heatmaps at lower resolutions due to its de-noising procedure, though it was also found the achieve the best correlation of replicates at mid-resolutions (500k, 250k).
 
 **Additional links:** The authors have made their implementations to run the various methods available on [GitHub](https://github.com/lhqxinghun/bioinformatics/tree/master/Hi-C/NormCompare).
+
+## Proteomics
+
+### Label-Free Quantification
+
+**Title:** [Scoring the downstream chain of small-n label-free proteomics against known ratios: search engine, match-between-runs, imputation, differential testing and enrichment background on a public three-species benchmark](https://doi.org/10.21203/rs.3.rs-11370244/v1)
+
+**Authors:** Byeongsoo Kang
+
+**Journal Info:** Research Square (preprint, not peer reviewed), October 2026
+
+**Description:** Uses the public human/yeast/*E. coli* hybrid-proteome benchmark PRIDE PXD028735, where the true log2 ratios between conditions are 0, −1 and +2, to score each step of a three-versus-three label-free analysis against the known answer. Six Orbitrap DDA runs were processed with MaxQuant 2.8.1 and FragPipe 24, and six TripleTOF SWATH runs of the same samples with DIA-NN 2.3.2. Each downstream step (match-between-runs, missing-value filter and imputation, statistical test and fold-change threshold, extra normalisation, enrichment background) was scored by the fraction of proteins within ±0.5 log2 of the truth and by the number of unchanged human proteins called significant.
+
+**Tools/methods compared:** `MaxQuant`, `FragPipe`, `DIA-NN`; imputation: none, `MinDet`, `MinProb`, Perseus-style, `QRILC`, `kNN`; testing: t-test, `limma`, `DEqMS`; STRING enrichment with whole-genome vs detected-protein background.
+
+**Recommendation(s):** On the 3,866 proteins quantified by all three tools, 98.9 / 92.4 / 80.9% (human / yeast / *E. coli*) were within ±0.5 log2 of the truth for MaxQuant LFQ, 99.7 / 99.3 / 97.7% for FragPipe and 100 / 99.4 / 97.7% for DIA-NN. Downstream choices mattered as much: at BH-adjusted p < 0.05, t-test / limma / DEqMS called 68 / 104 / 284 unchanged human proteins on MaxQuant LFQ output. Adding a fold-change threshold, using a strict valid-value filter, avoiding an extra median normalisation of FragPipe and DIA-NN output, and using the detected proteins as enrichment background each removed much of the false signal. With STRING's default whole-genome background, random lists of detected proteins gave a median of 103 GO/KEGG terms at FDR < 0.05.
+
+**Additional links (optional):** Scripts, settings and result tables for every engine and downstream step are on [GitHub](https://github.com/shoo99/sbmlab-benchmarks) and archived on [Zenodo](https://doi.org/10.5281/zenodo.23355028) (MIT). Raw data are on PRIDE ([PXD028735](https://www.ebi.ac.uk/pride/archive/projects/PXD028735)).
 
 # Contributors
 
